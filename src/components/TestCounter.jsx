@@ -1,102 +1,74 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  });
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
 
 function TestCounter() {
-//   const [secondsLeft, setSecondsLeft] = useState(65);
-//   const [isRunning, setIsRunning] = useState(false);
-//   const [timer, setTimer] = useState();
-//   const [sessionType, setSessionType] = useState('session');
-//   const [sessionLength, setSessionLength] = useState(4);
-//   const [breakLength, setBreakLength] = useState(5*60);
-//   const [timerHasBegun, setTimerHasBegun] = useState(false);
 
+  const [secondsLeft, setSecondsLeft] = useState(4);
+  
+  const [isRunning, setIsRunning] = useState(false);
+  const [sessionType, setSessionType] = useState('session');
 
-  //////////////////////////do no delete this link
-  //////////////////////////do no delete this link
-  ///   https://overreacted.io/making-setinterval-declarative-with-react-hooks/
-  //////////////////////////do no delete this link
-  //////////////////////////do no delete this link
-
-  const checkIfCountIsUnderway = () => {
-    if (timerHasBegun) {
-        startOrStopTimer()
-
-    } else {
-        setTimerHasBegun(true)
-        setSecondsLeft(sessionLength)
-        startOrStopTimer()
-    }
-  };
-
-  const toggleTimerType= () => {
-      sessionType === 'session' ? setSessionType('break') : setSessionType('session')
-  }
-
-  const startTimerWithNewTime=()=>{
-
-  }
-
-
-  const reset = () => {
-    setIsRunning(false);
-    setTimer(undefined);
-    setTimerHasBegun(false)
-    setSecondsLeft(sessionLength)
-  };
-
-  const handleTimeRanOut =()=>{
-    clearInterval(timer)
-    setTimer(undefined);
-    
-    setIsRunning(false);
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+    const switchAndRestartTimer =() => {
+      // setSecondsLeft(7)
       if (sessionType === 'session') {
-          setSecondsLeft(breakLength)
+        setSecondsLeft(4)
+        setSessionType('break')
       } else {
-        setSecondsLeft(sessionLength)
+        setSecondsLeft(7)
+        setSessionType('session')
       }
-      console.log('should call here: ');
-      startOrStopTimer()
-      
-  }
-
-  const startOrStopTimer = () => {
-    //   debugger
-    if (!isRunning) {
-      setIsRunning(true);
-      const timer = setInterval(() => {
-          
-        setSecondsLeft(12);
-        // setSecondsLeft((secondsLeft) => secondsLeft - 1);
-        console.log('secondsLeft inside interval: ', secondsLeft);
-
-        if (secondsLeft  <= 0) {
-        //   clearInterval(timer);
-        console.log('sl < 0')
-          handleTimeRanOut()
-        }
-      }, 1000);
-      setTimer(timer);
-    } else {
-      setIsRunning(false);
     }
-  };
 
 
+    useInterval(() => {
+      setSecondsLeft(secondsLeft - 1);
+      console.log('secondsLeft: ', secondsLeft);
 
-  useEffect(() => {
-    if (secondsLeft === 0) {
-      clearInterval(timer);
+      if (secondsLeft <= 0) {
+        switchAndRestartTimer()
+      }
+
+    }, isRunning ? 1000 : null);
+
+
+    const startStop =()=>{
+      setIsRunning(!isRunning)
     }
-  }, [secondsLeft, timer]);
 
-  useEffect(() => {
-    if (!isRunning) {
-      clearInterval(timer);
+    const reset =()=>{
+      if (isRunning) {
+        setIsRunning(!isRunning)
+      }
+      setSecondsLeft(33)
     }
-  }, [isRunning, secondsLeft, timer]);
 
-  useEffect(() => {
-    return () => clearInterval(timer);
-  }, [timer]);
+  
+
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+
 
   const testMagic =
     Math.trunc(secondsLeft / 60) > 10
@@ -108,10 +80,10 @@ function TestCounter() {
   return (
     <div >
       <h1>Pomodoro Timer</h1>
-      <button onClick={checkIfCountIsUnderway}>startstopwsess</button>
-      <button onClick={checkIfCountIsUnderway}>stop</button>
+      <button >start</button>
+      <button >stop</button>
       <button onClick={reset}>reset</button>
-      <button onClick={startOrStopTimer}>Start/Stop</button>
+      <button onClick={startStop}>Start/Stop</button>
       <div>{secondsLeft} seconds left</div>
       <div>
         {testMagic}:{testMagicSeconds}
@@ -120,7 +92,116 @@ function TestCounter() {
   );
 }
 
+
+
 export default TestCounter;
+
+
+// const [secondsLeft, setSecondsLeft] = useState(3);
+// const [isRunning, setIsRunning] = useState(false);
+// const [timer, setTimer] = useState();
+// // const [sessionType, setSessionType] = useState('session');
+// // const [sessionLength, setSessionLength] = useState(4);
+// // const [breakLength, setBreakLength] = useState(5*60);
+// const [sessionType] = useState('session');
+// const [sessionLength] = useState(4);
+// const [breakLength] = useState(5*60);
+// const [timerHasBegun, setTimerHasBegun] = useState(false);
+
+
+// //////////////////////////do no delete this link
+// //////////////////////////do no delete this link
+// ///   https://overreacted.io/making-setinterval-declarative-with-react-hooks/
+// //////////////////////////do no delete this link
+// //////////////////////////do no delete this link
+
+// const checkIfCountIsUnderway = () => {
+//   if (timerHasBegun) {
+//       startOrStopTimer()
+
+//   } else {
+//       setTimerHasBegun(true)
+//       setSecondsLeft(sessionLength)
+//       startOrStopTimer()
+//   }
+// };
+
+
+
+// // const toggleTimerType= () => {
+// //     sessionType === 'session' ? setSessionType('break') : setSessionType('session')
+// // }
+
+// // const startTimerWithNewTime=()=>{
+
+// // }
+
+
+// const reset = () => {
+//   setIsRunning(false);
+//   setTimer(undefined);
+//   setTimerHasBegun(false)
+//   setSecondsLeft(sessionLength)
+// };
+
+// const handleTimeRanOut =()=>{
+//   clearInterval(timer)
+//   setTimer(undefined);
+  
+//   setIsRunning(false);
+//     if (sessionType === 'session') {
+//         setSecondsLeft(breakLength)
+//     } else {
+//       setSecondsLeft(sessionLength)
+//     }
+//     console.log('should call here: ');
+//     startOrStopTimer()
+    
+// }
+
+// const startOrStopTimer = () => {
+//   if (!isRunning) {
+//     setIsRunning(true);
+//     const timer = setInterval(() => {
+//       // setSecondsLeft(12);
+//       setSecondsLeft((secondsLeft) => secondsLeft - 1);
+      
+
+//       if (secondsLeft  <= 0) {
+//       //   clearInterval(timer);
+//       console.log('sl < 0')
+//         handleTimeRanOut()
+//       }
+//     }, 1000);
+//     setTimer(timer);
+//   } else {
+//     setIsRunning(false);
+//   }
+// };
+
+
+
+// useEffect(() => {
+//   if (secondsLeft === 0) {
+//     clearInterval(timer);
+//   }
+// }, [secondsLeft, timer]);
+
+// useEffect(() => {
+//   if (!isRunning) {
+//     clearInterval(timer);
+//   }
+// }, [isRunning, secondsLeft, timer]);
+
+// useEffect(() => {
+//   return () => clearInterval(timer);
+// }, [timer]);
+
+
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
 
 
 // const start = () => {
