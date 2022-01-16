@@ -1,17 +1,17 @@
-const TimerControls = () => {
-    // const sessionLength = useSelector(state=>state.sessionLength )
-    // const breakLength = useSelector(state=>state.breakLength )
-    // const sessionType = useSelector(state=>state.sessionOrBreak)
-    // const timeRemaining = useSelector(state=>state.timeRemaining)
+import { useContext } from "react"
+import TimerContext from "../context/TimerContext"
 
+const TimerControls = () => {
+
+    const { startStop,reset } = useContext(TimerContext)
  
     return (
         <div>
-            <button id="start_stop" >
+            <button id="start_stop" onClick={startStop}>
                 Start/Stop Timer
             </button>
 
-            <button id="reset" >Reset</button>
+            <button id="reset" onClick={reset}>Reset</button>
         </div>
     )
 }
