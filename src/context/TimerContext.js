@@ -38,30 +38,35 @@ export const TimerProvider = ({ children }) => {
   };
 
   const incrementSessionLength = () => {
-    
     if (timerState.sessionLength < 3600) {
-    setTimerState({
-      isRunning: timerState.isRunning,
-      sessionType: timerState.sessionType,
-      sessionLength: (timerState.sessionLength = timerState.sessionLength + 60),
-      breakLength: timerState.breakLength,
-    });
-  }
+      setTimerState({
+        isRunning: timerState.isRunning,
+        sessionType: timerState.sessionType,
+        sessionLength: (timerState.sessionLength =
+          timerState.sessionLength + 60),
+        breakLength: timerState.breakLength,
+      });
+      
+    setSecondsRemaining(timerState.sessionLength)
+    }
+    
   };
   const decrementSessionLength = () => {
-    
     if (timerState.sessionLength > 60) {
-    setTimerState({
-      isRunning: timerState.isRunning,
-      sessionType: timerState.sessionType,
-      sessionLength: (timerState.sessionLength = timerState.sessionLength - 60),
-      breakLength: timerState.breakLength,
-    });
-  }
+      setTimerState({
+        isRunning: timerState.isRunning,
+        sessionType: timerState.sessionType,
+        sessionLength: (timerState.sessionLength =
+          timerState.sessionLength - 60),
+        breakLength: timerState.breakLength,
+      });
+      
+    setSecondsRemaining(timerState.sessionLength)
+    }
   };
 
   const startStop = () => {
-    console.log(timerState);
+    // console.log(timerState);
     setTimerState({
       isRunning: !timerState.isRunning,
       sessionType: timerState.sessionType,
@@ -69,11 +74,6 @@ export const TimerProvider = ({ children }) => {
       breakLength: timerState.breakLength,
     });
 
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    setSecondsRemaining(timerState.sessionLength);
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
   };
 
   const toggleTimer = () => {
@@ -110,8 +110,8 @@ export const TimerProvider = ({ children }) => {
       setTimerState({
         isRunning: !timerState.isRunning,
         sessionType: "session",
-        sessionLength: timerState.sessionLength,
-        breakLength: timerState.breakLength,
+        sessionLength: 1500,
+        breakLength: 300,
       });
     }
     setSecondsRemaining(timerState.sessionLength);
@@ -120,7 +120,7 @@ export const TimerProvider = ({ children }) => {
   useInterval(
     () => {
       setSecondsRemaining(secondsRemaining - 1);
-      console.log("secondsRemaining: ", secondsRemaining);
+      // console.log("secondsRemaining: ", secondsRemaining);
 
       if (secondsRemaining <= 0) {
         toggleTimer();
@@ -128,6 +128,7 @@ export const TimerProvider = ({ children }) => {
     },
     timerState.isRunning ? 1000 : null
   );
+
 
   return (
     <TimerContext.Provider
