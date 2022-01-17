@@ -1,11 +1,10 @@
 import { createContext, useState } from "react";
-import useInterval from "../logic/useInterval"; ////I am thinking that this will get used in here?????????????????
+import useInterval from "../logic/useInterval"; 
 
 const TimerContext = createContext();
 
 export const TimerProvider = ({ children }) => {
-  ///I am thinking that the seconds remaining should be its own separate state so that the whole state doesnt have to be copied every second
-
+ 
   const [secondsRemaining, setSecondsRemaining] = useState(1500);
 
   const [timerState, setTimerState] = useState({
@@ -38,6 +37,7 @@ export const TimerProvider = ({ children }) => {
   };
 
   const incrementSessionLength = () => {
+
     if (timerState.sessionLength < 3600) {
       setTimerState({
         isRunning: timerState.isRunning,
@@ -46,12 +46,12 @@ export const TimerProvider = ({ children }) => {
           timerState.sessionLength + 60),
         breakLength: timerState.breakLength,
       });
-      
-    setSecondsRemaining(timerState.sessionLength)
+
+      setSecondsRemaining(timerState.sessionLength);
     }
-    
   };
   const decrementSessionLength = () => {
+
     if (timerState.sessionLength > 60) {
       setTimerState({
         isRunning: timerState.isRunning,
@@ -60,20 +60,18 @@ export const TimerProvider = ({ children }) => {
           timerState.sessionLength - 60),
         breakLength: timerState.breakLength,
       });
-      
-    setSecondsRemaining(timerState.sessionLength)
+
+      setSecondsRemaining(timerState.sessionLength);
     }
   };
 
   const startStop = () => {
-    // console.log(timerState);
     setTimerState({
       isRunning: !timerState.isRunning,
       sessionType: timerState.sessionType,
       sessionLength: timerState.sessionLength,
       breakLength: timerState.breakLength,
     });
-
   };
 
   const toggleTimer = () => {
@@ -106,21 +104,19 @@ export const TimerProvider = ({ children }) => {
   };
 
   const reset = () => {
-    if (timerState.isRunning) {
-      setTimerState({
-        isRunning: !timerState.isRunning,
-        sessionType: "session",
-        sessionLength: 1500,
-        breakLength: 300,
-      });
-    }
-    setSecondsRemaining(timerState.sessionLength);
+    setTimerState({
+      isRunning: false,
+      sessionType: "session",
+      sessionLength: 1500,
+      breakLength: 300,
+    });
+
+    setSecondsRemaining(1500);
   };
 
   useInterval(
     () => {
       setSecondsRemaining(secondsRemaining - 1);
-      // console.log("secondsRemaining: ", secondsRemaining);
 
       if (secondsRemaining <= 0) {
         toggleTimer();
@@ -128,7 +124,6 @@ export const TimerProvider = ({ children }) => {
     },
     timerState.isRunning ? 1000 : null
   );
-
 
   return (
     <TimerContext.Provider

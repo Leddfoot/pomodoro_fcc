@@ -4,7 +4,6 @@ import TimerContext from "../context/TimerContext";
 const TimerDisplay = () => {
   const { secondsRemaining, timerState } = useContext(TimerContext);
   const sessionType = timerState.sessionType
-  console.log("secondsRemaining: ", secondsRemaining);
 
   const displayMinutes =
     Math.trunc(secondsRemaining / 60) > 10

@@ -6,7 +6,6 @@ const BreakLengthDisplay =()=> {
 const { incrementBreakLength, decrementBreakLength } = useContext(TimerContext)
 const {timerState} = useContext(TimerContext);
 const breakLength = timerState.breakLength 
-console.log('breakLength: ', breakLength);
 
     return (
       <div>
