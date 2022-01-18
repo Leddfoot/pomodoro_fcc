@@ -1,4 +1,4 @@
-import { createContext, useState, useRef } from "react";
+import { createContext, useState } from "react";
 import useInterval from "../logic/useInterval";
 
 const TimerContext = createContext();
@@ -14,24 +14,10 @@ export const TimerProvider = ({ children }) => {
     breakLength: 300,
   });
 
-
-  ////////////////////////////
-  ////////////////////////////
-  const testContext = () => {
-    const test = document.getElementById("beep");
-    console.log("test: ", test);
-    test.play();
-    test.pause();
-    test.currentTime = 0;
-    test.play();
+  const playSound = () => {
+    const audioElement = document.getElementById("beep");
+    audioElement.play();
   };
-  const testPause = () => {
-    const test = document.getElementById("beep");
-    console.log("test: ", test);
-    test.pause();
-  };
-  ////////////////////////////
-  ////////////////////////////
 
   const incrementBreakLength = () => {
     if (timerState.breakLength < 3600) {
@@ -92,12 +78,7 @@ export const TimerProvider = ({ children }) => {
   };
 
   const toggleTimer = () => {
-
-          //////////////
-      //////////////
-      testContext()
-      //////////////
-      //////////////
+      playSound()
     //This switches the sessionType and starts the timer over with that amount of time
     let newTimerLength =
       timerState.sessionType === "session"
@@ -129,18 +110,12 @@ export const TimerProvider = ({ children }) => {
 
   const reset = () => {
 
-    ////////////
-    ////////////
-    
-    const test = document.getElementById("beep");
-    console.log('test: ', test);
-    if (test) {
-      
-    test.pause();
-    test.currentTime = 0;
+    const audioElement = document.getElementById("beep");
+    if (audioElement) {
+    audioElement.pause();
+    audioElement.currentTime = 0;
     }
-    ////////////
-    ////////////
+
     setTimerState({
       isRunning: false,
       sessionType: "session",
@@ -165,12 +140,6 @@ export const TimerProvider = ({ children }) => {
   return (
     <TimerContext.Provider
       value={{
-        ///////////test//////
-        ///////////test//////
-        testContext,
-        testPause,
-        ///////////test//////
-        ///////////test//////
         secondsRemaining,
         timerState,
         toggleTimer,

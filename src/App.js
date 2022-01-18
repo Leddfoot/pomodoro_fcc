@@ -4,12 +4,8 @@ import TimerControls from "./components/TimerControls";
 import TimerDisplay from "./components/TimerDisplay";
 import Audio from "./components/Audio";
 
-import { useContext } from "react";
-import TimerContext from "./context/TimerContext";
 
 function App() {
-  const {secondsRemaining} = useContext(TimerContext);
-
 
   return (
     <>
