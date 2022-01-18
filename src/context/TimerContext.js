@@ -1,10 +1,10 @@
-import { createContext, useState } from "react";
-import useInterval from "../logic/useInterval"; 
+import { createContext, useState, useRef } from "react";
+import useInterval from "../logic/useInterval";
 
 const TimerContext = createContext();
 
 export const TimerProvider = ({ children }) => {
- 
+
   const [secondsRemaining, setSecondsRemaining] = useState(1500);
 
   const [timerState, setTimerState] = useState({
@@ -13,6 +13,25 @@ export const TimerProvider = ({ children }) => {
     sessionLength: 1500,
     breakLength: 300,
   });
+
+
+  ////////////////////////////
+  ////////////////////////////
+  const testContext = () => {
+    const test = document.getElementById("beep");
+    console.log("test: ", test);
+    test.play();
+    test.pause();
+    test.currentTime = 0;
+    test.play();
+  };
+  const testPause = () => {
+    const test = document.getElementById("beep");
+    console.log("test: ", test);
+    test.pause();
+  };
+  ////////////////////////////
+  ////////////////////////////
 
   const incrementBreakLength = () => {
     if (timerState.breakLength < 3600) {
@@ -37,7 +56,6 @@ export const TimerProvider = ({ children }) => {
   };
 
   const incrementSessionLength = () => {
-
     if (timerState.sessionLength < 3600) {
       setTimerState({
         isRunning: timerState.isRunning,
@@ -51,7 +69,6 @@ export const TimerProvider = ({ children }) => {
     }
   };
   const decrementSessionLength = () => {
-
     if (timerState.sessionLength > 60) {
       setTimerState({
         isRunning: timerState.isRunning,
@@ -75,6 +92,12 @@ export const TimerProvider = ({ children }) => {
   };
 
   const toggleTimer = () => {
+
+          //////////////
+      //////////////
+      testContext()
+      //////////////
+      //////////////
     //This switches the sessionType and starts the timer over with that amount of time
     let newTimerLength =
       timerState.sessionType === "session"
@@ -92,6 +115,7 @@ export const TimerProvider = ({ children }) => {
     } else {
       setSecondsRemaining(newTimerLength);
 
+
       setTimerState({
         isRunning: timerState.isRunning,
         sessionType: "session",
@@ -104,6 +128,19 @@ export const TimerProvider = ({ children }) => {
   };
 
   const reset = () => {
+
+    ////////////
+    ////////////
+    
+    const test = document.getElementById("beep");
+    console.log('test: ', test);
+    if (test) {
+      
+    test.pause();
+    test.currentTime = 0;
+    }
+    ////////////
+    ////////////
     setTimerState({
       isRunning: false,
       sessionType: "session",
@@ -128,6 +165,12 @@ export const TimerProvider = ({ children }) => {
   return (
     <TimerContext.Provider
       value={{
+        ///////////test//////
+        ///////////test//////
+        testContext,
+        testPause,
+        ///////////test//////
+        ///////////test//////
         secondsRemaining,
         timerState,
         toggleTimer,
